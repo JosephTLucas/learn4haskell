@@ -213,7 +213,7 @@ Bool
 >>> :t 'a'
 Char
 >>> :t 42
-Num
+Num p => p
 
 A pair of boolean and char:
 >>> :t (True, 'x')
@@ -221,19 +221,19 @@ A pair of boolean and char:
 
 Boolean negation:
 >>> :t not
-Bool
+Bool -> Bool
 
 Boolean 'and' operator:
 >>> :t (&&)
-Bool
+Bool -> Bool -> Bool
 
 Addition of two numbers:
 >>> :t (+)
-Num
+Num a => a -> a -> a
 
 Maximum of two values:
 >>> :t max
-Ord
+Ord a => a -> a -> a
 You might not understand each type at this moment, but don't worry! You've only
 started your Haskell journey. Types will become your friends soon.
 
@@ -479,7 +479,7 @@ Implement a function that returns the last digit of a given number.
 -}
 -- DON'T FORGET TO SPECIFY THE TYPE IN HERE
 lastDigit :: Int -> Int
-lastDigit n = mod n 10
+lastDigit n = mod (abs n) 10
 
 
 {- |
@@ -547,6 +547,7 @@ mid x y z
     | (x > (min y z)) && (x < (max y z)) = x
     | (y > (min x z)) && (y < (max x z)) = y
     | (z > (min x y)) && (z < (max x y)) = z
+    | otherwise = z
 
 {- |
 =⚔️= Task 8
@@ -627,13 +628,9 @@ Try to introduce variables in this task (either with let-in or where) to avoid
 specifying complex expressions.
 -}
 sumLast2 :: Int -> Int
-sumLast2 n = first n + second n
-    where
-        first :: Int -> Int
-        first x = div (mod x 100) 10
-        second :: Int -> Int
-        second x = mod (mod x 100) 10
-
+sumLast2 n =
+    let (first, second) = divMod (mod (abs n) 100) 10
+    in first + second
 
 {- |
 =💣= Task 10*
@@ -653,12 +650,10 @@ You need to use recursion in this task. Feel free to return to it later, if you
 aren't ready for this boss yet!
 -}
 firstDigit :: Int -> Int
-firstDigit n = if n < 10 then n else reduce n
-    where
-        reduce :: Int -> Int
-        reduce x
-            | x < 10 = x
-            | otherwise = reduce (div x 10)
+firstDigit x
+    | n < 10 = n
+    | otherwise = firstDigit (div n 10)
+    where n = abs x
 
 
 {-
