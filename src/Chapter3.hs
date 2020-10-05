@@ -343,7 +343,11 @@ Define the Book product data type. You can take inspiration from our description
 of a book, but you are not limited only by the book properties we described.
 Create your own book type of your dreams!
 -}
-
+data Book = MkBook
+    { bookName      :: String
+    , bookAuthor    :: String
+    , bookPages     :: Int
+    } deriving (Show)
 {- |
 =⚔️= Task 2
 
@@ -373,7 +377,22 @@ after the fight. The battle has the following possible outcomes:
    doesn't earn any money and keeps what they had before.
 
 -}
-
+data Knight = MkKnight
+    { khealth    :: Int
+    , kattack    :: Int
+    , kgold      :: Int
+    }
+--type Monster = Knight --is there a way to sublcass like this while still getting a MkMonster? How about preventing negative values in definition?
+data Monster = MkMonster
+    { mhealth   :: Int
+    , mattack   :: Int
+    , mgold     :: Int
+    }
+fight :: Monster -> Knight -> Int
+fight m k
+    | kattack k >= mhealth m = kgold k + mgold m
+    | (kattack k < mhealth m) && (mattack m >= khealth k) = -1
+    | otherwise = kgold k
 {- |
 =🛡= Sum types
 
@@ -459,7 +478,14 @@ and provide more flexibility when working with data types.
 Create a simple enumeration for the meal types (e.g. breakfast). The one who
 comes up with the most number of names wins the challenge. Use your creativity!
 -}
-
+data Meal
+    = Breakfast
+    | Second_breakfast
+    | Elevenses
+    | Luncheon
+    | Afternoon_tea
+    | Dinner
+    | Supper
 {- |
 =⚔️= Task 4
 
@@ -479,7 +505,15 @@ After defining the city, implement the following functions:
    complicated task, walls can be built only if the city has a castle
    and at least 10 living people inside
 -}
+data City
+    = Castle { castleName :: String, castleWall :: Bool }
+    | Church | Library 
+    | Houses { houseList :: [Int] }
 
+buildCastle :: City -> String -> String
+buildCastle cit nam = castleName cit
+buildHouse :: City
+buildHouse cit = Houses (1:houseList)
 {-
 =🛡= Newtypes
 
