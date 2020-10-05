@@ -336,7 +336,10 @@ from it!
 ghci> :l src/Chapter2.hs
 -}
 subList :: Int -> Int -> [a] -> [a]
-subList a b l  = take (b - a + 1) (drop a l)
+subList a b l
+    | b <= a = []
+    | a < 0 || b < 0 = []
+    | otherwise = take (b - a + 1) (drop a l)
 
 {- |
 =⚔️= Task 4
@@ -608,7 +611,7 @@ Implement a function that duplicates each element of the list
 -}
 duplicate :: [a] -> [a]
 duplicate [] = []
-duplicate (x:xs) = [x, x] ++ duplicate xs
+duplicate (x:xs) = x :x : duplicate xs
 
 
 {- |
@@ -624,10 +627,11 @@ Write a function that takes elements of a list only on even positions.
 [2,3,4]
 -}
 takeEven :: [a] -> [a]
-takeEven [] = []
-takeEven [a] = [a]
-takeEven (x:xs) = takeEven xs
-
+takeEven l = go l [] 0
+    where
+        go :: [a] -> [a] -> Int -> [a]
+        go [] n y = reverse n
+        go (x:xs) n y = if even y then go xs (x:n) (y+1) else go xs n (y+1)
 {- |
 =🛡= Higher-order functions
 
@@ -733,7 +737,7 @@ value of the element itself
 🕯 HINT: Use combination of 'map' and 'replicate'
 -}
 smartReplicate :: [Int] -> [Int]
-smartReplicate l = concat (map (replicate 2) l)
+smartReplicate l = concat (map (\x -> replicate x x) l)
 
 {- |
 =⚔️= Task 9
@@ -746,7 +750,8 @@ the list with only those lists that contain a passed element.
 
 🕯 HINT: Use the 'elem' function to check whether an element belongs to a list
 -}
-contains = error "contains: Not implemented!"
+contains :: Int -> [[Int]] -> [[Int]]
+contains a l = map snd (filter fst (zip (map (\x -> elem a x) l) l))
 
 
 {- |
@@ -786,13 +791,15 @@ Let's now try to eta-reduce some of the functions and ensure that we
 mastered the skill of eta-reducing.
 -}
 divideTenBy :: Int -> Int
-divideTenBy x = div 10 x
+divideTenBy = div 10
 
 -- TODO: type ;)
-listElementsLessThan x l = filter (< x) l
+listElementsLessThan :: Int -> [Int] -> [Int]
+listElementsLessThan x = filter (< x)
 
 -- Can you eta-reduce this one???
-pairMul xs ys = zipWith (*) xs ys
+pairMul :: [Int] -> [Int] -> [Int]
+pairMul = zipWith (*)
 
 {- |
 =🛡= Lazy evaluation
@@ -847,7 +854,10 @@ list.
 
 🕯 HINT: Use the 'cycle' function
 -}
-rotate = error "rotate: Not implemented!"
+rotate :: Int -> [a] -> [a]
+rotate x l
+    | x < 0 = []
+    | otherwise = drop x (take ((length l) + x) (cycle l))
 
 {- |
 =💣= Task 12*
@@ -863,7 +873,11 @@ and reverses it.
   function, but in this task, you need to implement it manually. No
   cheating!
 -}
-rewind = error "rewind: Not Implemented!"
+rewind :: [a] -> [a]
+rewind l = go [] l
+    where
+        go n [] = n
+        go n (x:xs) = go (x:n) xs
 
 
 {-
