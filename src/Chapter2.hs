@@ -626,12 +626,18 @@ Write a function that takes elements of a list only on even positions.
 >>> takeEven [2, 1, 3, 5, 4]
 [2,3,4]
 -}
+{-
 takeEven :: [a] -> [a]
-takeEven l = go l [] 0
+takeEven l = go l True
     where
-        go :: [a] -> [a] -> Int -> [a]
-        go [] n y = reverse n
-        go (x:xs) n y = if even y then go xs (x:n) (y+1) else go xs n (y+1)
+        go :: [a] -> Bool -> [a]
+        go [] y = []
+        go (x:xs) y = if y then x : go xs (not y) else go xs (not y)
+-}
+takeEven :: [a] -> [a]
+takeEven [] = []
+takeEven [x] = [x]
+takeEven (x:y:xs) = x : takeEven xs
 {- |
 =🛡= Higher-order functions
 
@@ -737,7 +743,7 @@ value of the element itself
 🕯 HINT: Use combination of 'map' and 'replicate'
 -}
 smartReplicate :: [Int] -> [Int]
-smartReplicate l = concat (map (\x -> replicate x x) l)
+smartReplicate l = concatMap (\x -> replicate x x) l
 
 {- |
 =⚔️= Task 9
@@ -751,7 +757,8 @@ the list with only those lists that contain a passed element.
 🕯 HINT: Use the 'elem' function to check whether an element belongs to a list
 -}
 contains :: Int -> [[Int]] -> [[Int]]
-contains a l = map snd (filter fst (zip (map (\x -> elem a x) l) l))
+--contains a l = map snd (filter fst (zip (map (\x -> elem a x) l) l))
+contains a l = filter (\x -> elem a x) l
 
 
 {- |
@@ -857,6 +864,7 @@ list.
 rotate :: Int -> [a] -> [a]
 rotate x l
     | x < 0 = []
+    | null l = []
     | otherwise = drop x (take ((length l) + x) (cycle l))
 
 {- |
