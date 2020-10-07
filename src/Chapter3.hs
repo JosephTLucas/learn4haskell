@@ -382,7 +382,7 @@ data Knight = MkKnight
     , kattack    :: Int
     , kgold      :: Int
     }
---type Monster = Knight --is there a way to sublcass like this while still getting a MkMonster? How about preventing negative values in definition?
+--type Monster = Knight --is there a way to sublcass like this while still getting a MkMonster? How about preventing negative values in definitions for health/attack/gold?
 data Monster = MkMonster
     { mhealth   :: Int
     , mattack   :: Int
@@ -510,10 +510,6 @@ data City
     | Church | Library 
     | Houses { houseList :: [Int] }
 
-buildCastle :: City -> String -> String
-buildCastle cit nam = castleName cit
-buildHouse :: City
-buildHouse cit = Houses (1:houseList)
 {-
 =🛡= Newtypes
 
