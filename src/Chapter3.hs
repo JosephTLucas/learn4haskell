@@ -343,7 +343,11 @@ Define the Book product data type. You can take inspiration from our description
 of a book, but you are not limited only by the book properties we described.
 Create your own book type of your dreams!
 -}
-
+data Book = MkBook
+    { bookName      :: String
+    , bookAuthor    :: String
+    , bookPages     :: Int
+    } deriving (Show)
 {- |
 =⚔️= Task 2
 
@@ -373,7 +377,21 @@ after the fight. The battle has the following possible outcomes:
    doesn't earn any money and keeps what they had before.
 
 -}
-
+data Knight = MkKnight
+    { khealth    :: Int
+    , kattack    :: Int
+    , kgold      :: Int
+    }
+data Monster = MkMonster
+    { mhealth   :: Int
+    , mattack   :: Int
+    , mgold     :: Int
+    }
+fight :: Monster -> Knight -> Int
+fight m k
+    | kattack k >= mhealth m = kgold k + mgold m
+    | (kattack k < mhealth m) && (mattack m >= khealth k) = -1
+    | otherwise = kgold k
 {- |
 =🛡= Sum types
 
@@ -459,7 +477,14 @@ and provide more flexibility when working with data types.
 Create a simple enumeration for the meal types (e.g. breakfast). The one who
 comes up with the most number of names wins the challenge. Use your creativity!
 -}
-
+data Meal
+    = Breakfast
+    | Second_breakfast
+    | Elevenses
+    | Luncheon
+    | Afternoon_tea
+    | Dinner
+    | Supper
 {- |
 =⚔️= Task 4
 
@@ -479,6 +504,28 @@ After defining the city, implement the following functions:
    complicated task, walls can be built only if the city has a castle
    and at least 10 living people inside
 -}
+data Castle = Castle
+    { castleName :: String
+    , castleWall :: Bool
+    }
+data CommunityBuilding
+    = Church
+    | Library
+data House
+    = One
+    | Two
+    | Three
+    | Four
+data City = City
+    { mkCastle :: Maybe Castle
+    , mkCommunityBuilding :: CommunityBuilding
+    , mkHouse :: [House]
+    }
+buildCastle :: City -> String -> City
+buildCastle city castle_name = mkCastle castleName False
+buildHouse :: City -> Int -> City
+buildHouse city house_num = mkHouse house_num : [House]
+buildWalls :: City -> City
 
 {-
 =🛡= Newtypes
