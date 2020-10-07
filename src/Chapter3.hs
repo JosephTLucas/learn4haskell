@@ -382,7 +382,6 @@ data Knight = MkKnight
     , kattack    :: Int
     , kgold      :: Int
     }
---type Monster = Knight --is there a way to sublcass like this while still getting a MkMonster? How about preventing negative values in definitions for health/attack/gold?
 data Monster = MkMonster
     { mhealth   :: Int
     , mattack   :: Int
@@ -505,10 +504,28 @@ After defining the city, implement the following functions:
    complicated task, walls can be built only if the city has a castle
    and at least 10 living people inside
 -}
-data City
-    = Castle { castleName :: String, castleWall :: Bool }
-    | Church | Library 
-    | Houses { houseList :: [Int] }
+data Castle = Castle
+    { castleName :: String
+    , castleWall :: Bool
+    }
+data CommunityBuilding
+    = Church
+    | Library
+data House
+    = One
+    | Two
+    | Three
+    | Four
+data City = City
+    { mkCastle :: Maybe Castle
+    , mkCommunityBuilding :: CommunityBuilding
+    , mkHouse :: [House]
+    }
+buildCastle :: City -> String -> City
+buildCastle city castle_name = mkCastle castleName False
+buildHouse :: City -> Int -> City
+buildHouse city house_num = mkHouse house_num : [House]
+buildWalls :: City -> City
 
 {-
 =🛡= Newtypes
