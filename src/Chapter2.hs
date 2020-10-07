@@ -637,7 +637,7 @@ takeEven l = go l True
 takeEven :: [a] -> [a]
 takeEven [] = []
 takeEven [x] = [x]
-takeEven (x:y:xs) = x : takeEven xs
+takeEven (x:_:xs) = x : takeEven xs
 {- |
 =🛡= Higher-order functions
 
@@ -757,8 +757,7 @@ the list with only those lists that contain a passed element.
 🕯 HINT: Use the 'elem' function to check whether an element belongs to a list
 -}
 contains :: Int -> [[Int]] -> [[Int]]
---contains a l = map snd (filter fst (zip (map (\x -> elem a x) l) l))
-contains a l = filter (\x -> elem a x) l
+contains a = filter (\x -> elem a x)
 
 
 {- |
